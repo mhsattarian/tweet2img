@@ -36,6 +36,7 @@ async function getScreenshot(html, isDev) {
   // calculate the content bbox
   const rect = await page.evaluate((selector) => {
     const element = document.querySelector(selector);
+    element.shadowRoot.querySelector('.SandboxRoot').style.fontFamily = 'Vazir'
     const { x, y, width, height } = element.getBoundingClientRect();
     return { left: x, top: y, width, height, id: element.id };
   }, ".twitter-tweet");
@@ -64,8 +65,9 @@ exports.handler = async (event, context, callback) => {
   try {
     console.log("Getting screenshot");
     const isDev = process.env.CHROME === 'local' ? true : false;
-    console.log(process.env.CHROME, {isDev})
-    const photoBuffer = await getScreenshot(r.html, isDev);
+    console.log(process.env.CHROME, {isDev});
+    let html = '<link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v26.0.2/dist/font-face.css">' + r.html;
+    const photoBuffer = await getScreenshot(html, isDev);
     return {
       statusCode: 200,
       body: photoBuffer.toString("base64"),
