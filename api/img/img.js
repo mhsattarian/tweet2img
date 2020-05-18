@@ -28,7 +28,7 @@ async function getScreenshot(html, isDev) {
   console.log("📸");
   const browser = await puppeteer.launch(options);
   const page = await browser.newPage();
-  await page.addStyleTag({url: 'https://tweet2img.netlify.app/theme.css'})
+  // await page.addStyleTag({url: 'https://tweet2img.netlify.app/theme.css'});
 
   await page.setViewport({ width: 720, height: 1080, deviceScaleFactor: 1.5 });
   await page.setContent(html, {
@@ -67,21 +67,14 @@ async function getScreenshot(html, isDev) {
 // Docs on event and context https://www.netlify.com/docs/functions/#the-handler-method
 exports.handler = async (event, context, callback) => {
   const url = event.queryStringParameters.url;
-  console.time('Oembed');
   const r = await fetch(
     `https://publish.twitter.com/oembed?url=${url}&hide_thread=true`
     ).then((r) => r.json());
-    console.timeEnd('Oembed');
 
   try {
-    console.log("Getting screenshot");
     const isDev = process.env.CHROME === 'local' ? true : false;
-    console.log(process.env.CHROME, {isDev});
-    console.time('html-change');
-    let html = '<link type="text/css" rel="stylesheet" href="/theme.css">' + r.html;
-    console.timeLog('html-change');
+    let html = '<link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v26.0.2/dist/font-face.css">' + r.html;
     html.replace("https://platform.twitter.com", "");
-    console.timeEnd('html-change')
     const photoBuffer = await getScreenshot(html, isDev);
     return {
       statusCode: 200,
