@@ -37,12 +37,17 @@ async function getScreenshot(html, isDev) {
   // calculate the content bbox
   const rect = await page.evaluate((selector) => {
     const element = document.querySelector(selector);
-    element.shadowRoot.querySelector('.SandboxRoot').style.fontFamily = 'Vazir';
+    try {
+      element.shadowRoot.querySelector('.SandboxRoot').style.fontFamily = 'Vazir';
+    }
+    catch (err) {
+      
+    }
     const { x, y, width, height } = element.getBoundingClientRect();
     return { left: x, top: y, width, height, id: element.id };
   }, ".twitter-tweet");
 
-  await  wait(1000);
+  await  wait(100);
 
   // screen shot only the rect
   let padding = 0;
