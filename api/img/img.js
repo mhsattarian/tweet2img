@@ -28,7 +28,7 @@ async function getScreenshot(html, isDev) {
   console.log("📸");
   const browser = await puppeteer.launch(options);
   const page = await browser.newPage();
-  await page.addStyleTag({path: 'https://tweet2img.netlify.app/theme.css'})
+  await page.addStyleTag({url: 'https://tweet2img.netlify.app/theme.css'})
 
   await page.setViewport({ width: 720, height: 1080, deviceScaleFactor: 1.5 });
   await page.setContent(html, {
