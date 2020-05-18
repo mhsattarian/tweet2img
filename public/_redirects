@@ -1,1 +1,2 @@
-/test /.netlify/functions/test 200 
+/img /.netlify/functions/img 200 
+/envy /.netlify/functions/envy 200 
