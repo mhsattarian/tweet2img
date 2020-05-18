@@ -1,6 +1,7 @@
 const chrome = require("chrome-aws-lambda");
 const puppeteer = require("puppeteer-core");
 const fetch = require("node-fetch");
+const wait = require('waait');
 
 const exePath = "/usr/bin/google-chrome";
 
@@ -36,10 +37,12 @@ async function getScreenshot(html, isDev) {
   // calculate the content bbox
   const rect = await page.evaluate((selector) => {
     const element = document.querySelector(selector);
-    element.shadowRoot.querySelector('.SandboxRoot').style.fontFamily = 'Vazir'
+    element.shadowRoot.querySelector('.SandboxRoot').style.fontFamily = 'Vazir';
     const { x, y, width, height } = element.getBoundingClientRect();
     return { left: x, top: y, width, height, id: element.id };
   }, ".twitter-tweet");
+
+  await  wait(1000);
 
   // screen shot only the rect
   let padding = 0;

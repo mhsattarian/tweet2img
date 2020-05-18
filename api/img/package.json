@@ -12,6 +12,7 @@
   "dependencies": {
     "chrome-aws-lambda": "^2.1.1",
     "node-fetch": "^2.6.0",
-    "puppeteer-core": "^2.1.1"
+    "puppeteer-core": "^2.1.1",
+    "waait": "^1.0.5"
   }
 }
