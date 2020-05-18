@@ -29,7 +29,7 @@ async function getScreenshot(html, isDev) {
   const browser = await puppeteer.launch(options);
   const page = await browser.newPage();
 
-  await page.setViewport({ width: 720, height: 1080 });
+  await page.setViewport({ width: 720, height: 1080, deviceScaleFactor: 1.5 });
   await page.setContent(html, {
     waitUntil: ["networkidle0"],
   });
@@ -41,7 +41,7 @@ async function getScreenshot(html, isDev) {
       element.shadowRoot.querySelector('.SandboxRoot').style.fontFamily = 'Vazir';
     }
     catch (err) {
-      
+      console.log(err);
     }
     const { x, y, width, height } = element.getBoundingClientRect();
     return { left: x, top: y, width, height, id: element.id };
@@ -77,7 +77,7 @@ exports.handler = async (event, context, callback) => {
     const isDev = process.env.CHROME === 'local' ? true : false;
     console.log(process.env.CHROME, {isDev});
     console.time('html-change');
-    let html = '<link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v26.0.2/dist/font-face.css">' + r.html;
+    let html = '<link type="text/css" rel="stylesheet" href="/theme.css">' + r.html;
     console.timeLog('html-change');
     html.replace("https://platform.twitter.com", "");
     console.timeEnd('html-change')

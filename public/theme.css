@@ -14,9 +14,13 @@
   font-weight: bold;
 }
 
+* {
+  background: #c00c00 !important;
+}
 
-twitter-widget::part(p) {
+
+twitter-widget::part(.EmbeddedTweet-tweetContainer) {
   font-familty: Vazir !important;
-  background: red;
+  background: #c00c00;
 }
 
