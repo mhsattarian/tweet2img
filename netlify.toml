@@ -3,5 +3,8 @@
   functions = "api"
   environment = { CHROME = "local" }
 
+[[plugins]]
+  package = "@netlify/plugin-functions-install-core"
+
 [context.production]
   environment = { CHROME = "aws" }
