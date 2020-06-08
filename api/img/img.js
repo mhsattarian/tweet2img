@@ -76,12 +76,13 @@ exports.handler = async (event, context, callback) => {
     let html = '<link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v26.0.2/dist/font-face.css">' + r.html;
     html.replace("https://platform.twitter.com", "");
     const photoBuffer = await getScreenshot(html, isDev);
-    return {
+    callback(null, {
       statusCode: 200,
       body: photoBuffer.toString("base64"),
       isBase64Encoded: true,
-    };
+    });
   } catch (err) {
     return { statusCode: 500, body: err.toString() };
+    callback(err, null);
   }
 };
