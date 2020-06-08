@@ -2,6 +2,7 @@
   publish = "public"
   functions = "api"
   environment = { CHROME = "local" }
+  command = "#"
 
 [[plugins]]
   package = "@netlify/plugin-functions-install-core"
