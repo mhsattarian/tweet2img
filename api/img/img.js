@@ -4,10 +4,9 @@
 const chrome = require("chrome-aws-lambda");
 const puppeteer = require("puppeteer-core");
 const fetch = require("node-fetch");
-// const wait = require('waait');
+const wait = require('waait');
 
 const exePath = "/usr/bin/google-chrome";
-
 
 async function getOptions(isDev) {
   let options;
@@ -52,7 +51,10 @@ async function getScreenshot(html, isDev) {
     return { left: x, top: y, width, height, id: element.id };
   }, ".twitter-tweet");
 
-  // await  wait(100);
+  if (isDev)
+    await wait(700); // local is slower to render font
+  else
+    await wait(100);
 
   // screen shot only the rect
   let padding = 0;
@@ -71,14 +73,17 @@ async function getScreenshot(html, isDev) {
 // Docs on event and context https://www.netlify.com/docs/functions/#the-handler-method
 exports.handler = async (event, context, callback) => {
   const url = event.queryStringParameters.url;
+  const theme = event.queryStringParameters.theme || 'light';
+
   const r = await fetch(
-    `https://publish.twitter.com/oembed?url=${url}&hide_thread=true`
+    `https://publish.twitter.com/oembed?url=${url}&hide_thread=true&theme=${theme}`
     ).then((r) => r.json());
 
   try {
     const isDev = process.env.CHROME === 'local' ? true : false;
     let html = '<link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v26.0.2/dist/font-face.css">' + r.html;
     html.replace("https://platform.twitter.com", "");
+
     const photoBuffer = await getScreenshot(html, isDev);
     return {
       statusCode: 200,
