@@ -1,7 +1,7 @@
 # tweet2img
 
 
-![Loading...](https://tweet2img.netlify.app/img?url=https://twitter.com/Twitter/status/1233065728972066817)
+![Loading...](/assets/header.jpeg)
 
 Generate an image from a tweet, so that it can be easier to share! ¯\\\_(ツ)_/¯
 
@@ -15,7 +15,7 @@ copy link of a tweet and place at the end:
 https://tweet2img.netlify.app/img?url=<HERE>
 ```
 
-example of [this tweet](https://twitter.com/Mehdi70501002/status/1262117721090785280):
+live example of [this tweet](https://twitter.com/Mehdi70501002/status/1262117721090785280):
 
 ![Loading...](https://tweet2img.netlify.app/img?url=https://twitter.com/Mehdi70501002/status/1262117721090785280)
 
