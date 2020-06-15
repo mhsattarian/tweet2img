@@ -1,9 +1,13 @@
+// Code from https://github.com/leighhalliday/generate-og-image/blob/master/src/chromium.ts
+// and https://github.com/wesbos/wesbos/blob/master/functions/ogimage/ogimage.js
+
 const chrome = require("chrome-aws-lambda");
 const puppeteer = require("puppeteer-core");
 const fetch = require("node-fetch");
-const wait = require('waait');
+// const wait = require('waait');
 
 const exePath = "/usr/bin/google-chrome";
+
 
 async function getOptions(isDev) {
   let options;
@@ -48,7 +52,7 @@ async function getScreenshot(html, isDev) {
     return { left: x, top: y, width, height, id: element.id };
   }, ".twitter-tweet");
 
-  await  wait(100);
+  // await  wait(100);
 
   // screen shot only the rect
   let padding = 0;
