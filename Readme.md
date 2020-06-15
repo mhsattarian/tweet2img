@@ -19,3 +19,7 @@ live example of [this tweet](https://twitter.com/Mehdi70501002/status/1262117721
 
 ![Loading...](https://tweet2img.netlify.app/img?url=https://twitter.com/Mehdi70501002/status/1262117721090785280)
 
+dark theme is supported too! live example of [this tweet](https://twitter.com/fermatslibrary/status/1271069698088632321?s=19):
+
+![Loading...](https://tweet2img.netlify.app/img?theme=dark&url=https://twitter.com/fermatslibrary/status/1271069698088632321?s=19)
+
