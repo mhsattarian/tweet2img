@@ -1,51 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="assets/style.css" />
-    <title>tweet2img</title>
-  </head>
-  <body>
-    <main>
-      <article id="query">
-        <form>
-          <input type="text" placeholder="Tweet link" />
-          <button type="submit">
-            <span class="icon">I</span>
-          </button>
-        </form>
+<head>
+	<meta charset='utf-8'>
+	<meta name='viewport' content='width=device-width,initial-scale=1'>
 
-        <footer></footer>
-      </article>
-      <article id="image">
-        <div id="image-wrapper">
-          <img src="" />
-        </div>
-      </article>
-    </main>
+	<title>Svelte app</title>
 
-    <script src="https://unpkg.com/nprogress@0.2.0/nprogress.js"></script>
-    <script>
-      const form = document.querySelector("form");
-      const tlink = document.querySelector("input");
-      const img = document.querySelector("img");
+	<link rel='icon' type='image/png' href='/favicon.png'>
+	<link rel='stylesheet' href='/global.css'>
+	<link rel='stylesheet' href='/build/bundle.css'>
 
-      form.addEventListener("submit", (e) => {
-        NProgress.start();
-        e.preventDefault();
-        fetch(`/img?url=${tlink.value}`)
-          .then((response) => response.blob())
-          .then((blob) => {
-            var reader = new FileReader();
-            reader.addEventListener("loadend", () => {
-              let contents = reader.result;
-              img.src = contents;
-              NProgress.done();
-            });
-            reader.readAsDataURL(blob);
-          });
-      });
-    </script>
-  </body>
+	<script defer src='/build/bundle.js'></script>
+</head>
+
+<body>
+</body>
 </html>

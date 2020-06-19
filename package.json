@@ -1,15 +1,33 @@
 {
   "name": "tweet2img",
-  "version": "1.1.0",
+  "version": "2.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env CHROME=local netlify dev"
+    "start:netlify": "cross-env CHROME=local netlify dev",
+    "start": "sirv public",
+    "dev": "rollup -c -w",
+    "build": "rollup -c"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "feather-icons": "^4.28.0",
+    "nprogress": "^0.2.0",
+    "rollup-plugin-postcss": "^3.1.2",
+    "sirv-cli": "^0.4.4",
+    "waait": "^1.0.5"
+  },
   "devDependencies": {
-    "cross-env": "^7.0.2"
+    "@rollup/plugin-commonjs": "^12.0.0",
+    "@rollup/plugin-node-resolve": "^8.0.0",
+    "cross-env": "^7.0.2",
+    "rollup": "^2.3.4",
+    "rollup-plugin-livereload": "^1.0.0",
+    "rollup-plugin-svelte": "^5.0.3",
+    "rollup-plugin-terser": "^5.1.2",
+    "svelte": "^3.0.0",
+    "svelte-feather-icons": "^3.2.2"
   }
 }
