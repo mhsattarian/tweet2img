@@ -43,11 +43,10 @@ async function getScreenshot(html, isDev, theme) {
     const element = document.querySelector(selector);
     try {
       element.shadowRoot.querySelector(".SandboxRoot").style.fontFamily =
-      "Vazir";
+        "Vazir";
     } catch (err) {
       console.log(err);
     }
-    
     const { x, y, width, height } = element.getBoundingClientRect();
     return { left: x, top: y, width, height, id: element.id };
   }, ".twitter-tweet");
