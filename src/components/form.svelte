@@ -1,6 +1,7 @@
 <script>
   import { createEventDispatcher } from "svelte";
   import Footer from "./footer.svelte";
+  import Header from "./header.svelte";
 
   const dispatch = createEventDispatcher();
   let tweetUrl = "";
@@ -29,7 +30,7 @@
 
   article#query {
     display: grid;
-    grid-template-rows: auto 60px;
+    grid-template-rows: 100px auto 60px;
     width: 100%;
     grid-template-columns: 1fr;
     justify-items: center;
@@ -117,6 +118,8 @@
 </style>
 
 <article id="query">
+  <Header />
+
   <form on:submit|preventDefault={emitSubmit}>
     <div id="url">
       <input
