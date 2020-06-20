@@ -30,7 +30,7 @@
 
 <article id="image">
   <div id="image-wrapper">
-    <a href={downloadLink || '#'} download={downloadLink ? 'tweet.jpg' : null} ><img src={src || exampleSrc} on:click /></a>
+    <a href={downloadLink || '#'} download={downloadLink ? 'tweet.jpg' : null} ><img src={src || exampleSrc} /></a>
     {#if src.length}
       <p>click image to download</p>
     {:else}

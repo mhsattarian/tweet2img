@@ -11,9 +11,8 @@
   async function handleSubmit(e) {
     const {tweetUrl, liked, dark, removeComments} = e.detail;
 
-    console.log({tweetUrl, liked, dark, removeComments});
-
     if (!tweetUrl.length) return;
+    if (!imgSrc.length) URL.revokeObjectURL(imgSrc);
 
     nprogress.start();
     let url = `/img?url=${tweetUrl}${dark ? '&theme=dark' : ''}${liked ? '&liked=true' : ''}${removeComments ? '&removeComments=true' : ''}`;
@@ -34,11 +33,6 @@
         // });
         // reader.readAsDataURL(blob);
       });
-  }
-
-  function downloadImage() {
-    if (!imgSrc.length) return;
-    URL.revokeObjectURL(imgSrc);
   }
 </script>
 
@@ -62,5 +56,5 @@
 
 <main>
   <Form on:formsubmit={handleSubmit} />
-  <ImageView src={imgSrc} downloadLink={downloadLink} on:click={downloadImage} />
+  <ImageView src={imgSrc} downloadLink={downloadLink} />
 </main>
