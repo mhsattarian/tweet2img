@@ -1,13 +1,19 @@
 <script>
   import { createEventDispatcher } from "svelte";
-  import Footer from './footer.svelte';
+  import Footer from "./footer.svelte";
 
   const dispatch = createEventDispatcher();
   let tweetUrl = "";
+  let dark = false;
+  let liked = false;
+  let removeComments = false;
 
   function emitSubmit() {
     dispatch("formsubmit", {
-      tweetUrl
+      tweetUrl,
+      dark,
+      liked,
+      removeComments
     });
   }
 </script>
@@ -27,18 +33,26 @@
     width: 100%;
     grid-template-columns: 1fr;
     justify-items: center;
+
   }
 
   article#query form {
-    height: 4em;
+    height: 10em;
     width: 90%;
     display: flex;
+    flex-direction: column;
     justify-content: space-around;
     align-items: center;
     position: relative;
   }
 
-  article#query form input {
+  #url {
+    width: 100%;
+    position: relative;
+    height: 4em;
+  }
+
+  article#query form input[type="text"] {
     width: 100%;
     height: 100%;
     line-height: 20px;
@@ -51,9 +65,6 @@
     border-radius: 3em;
     outline: none;
     box-shadow: inset 0 1px 2px rgba(27, 31, 35, 0.075);
-  }
-
-  article#query form input[type="text"] {
     padding: 1em;
   }
 
@@ -61,12 +72,15 @@
     font-family: "Anicons Color", sans-serif;
     position: absolute;
     right: 0.5em;
-    width: 4em;
+    width: 3em;
     height: 3em;
+    top: 50%;
+    transform: translateY(-50%);
     -webkit-appearance: none;
     border: none;
     background: white;
     border-radius: 10px;
+    padding: 1em;
   }
 
   article#query form button[type="submit"] .icon {
@@ -77,6 +91,14 @@
     align-items: center;
     font-size: 3em;
     cursor: pointer;
+  }
+
+  #options {
+    width: 100%;
+    padding: 0 1em;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(8em, 1fr));
+    gap: 1em;
   }
 
   .icon {
@@ -96,10 +118,31 @@
 
 <article id="query">
   <form on:submit|preventDefault={emitSubmit}>
-    <input bind:value={tweetUrl} type="text" placeholder="Tweet link" autocomplete="url" autofocus />
-    <button type="submit">
-      <span class="icon">I</span>
-    </button>
+    <div id="url">
+      <input
+        bind:value={tweetUrl}
+        type="text"
+        placeholder="Tweet link"
+        autocomplete="url"
+        autofocus />
+      <button type="submit">
+        <span class="icon">I</span>
+      </button>
+    </div>
+    <div id="options">
+      <label title="enable dark theme">
+        <input bind:checked={dark} type="checkbox" />
+        Dark
+      </label>
+      <label title="make tweet liked">
+        <input bind:checked={liked} type="checkbox" />
+        liked
+      </label>
+      <label title="make tweet liked">
+        <input bind:checked={removeComments} type="checkbox" />
+        remove Comments
+      </label>
+    </div>
   </form>
 
   <Footer />

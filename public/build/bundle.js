@@ -897,7 +897,7 @@ var app = (function () {
 
     const file = "src/components/imageView.svelte";
 
-    // (35:4) {:else}
+    // (36:4) {:else}
     function create_else_block(ctx) {
     	let p;
 
@@ -905,7 +905,7 @@ var app = (function () {
     		c: function create() {
     			p = element("p");
     			p.textContent = "Example";
-    			add_location(p, file, 35, 6, 615);
+    			add_location(p, file, 36, 6, 722);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -919,14 +919,14 @@ var app = (function () {
     		block,
     		id: create_else_block.name,
     		type: "else",
-    		source: "(35:4) {:else}",
+    		source: "(36:4) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (33:4) {#if src.length}
+    // (34:4) {#if src.length}
     function create_if_block(ctx) {
     	let p;
 
@@ -934,7 +934,7 @@ var app = (function () {
     		c: function create() {
     			p = element("p");
     			p.textContent = "click image to download";
-    			add_location(p, file, 33, 6, 566);
+    			add_location(p, file, 34, 6, 673);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -948,7 +948,7 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(33:4) {#if src.length}",
+    		source: "(34:4) {#if src.length}",
     		ctx
     	});
 
@@ -958,8 +958,11 @@ var app = (function () {
     function create_fragment(ctx) {
     	let article;
     	let div;
+    	let a;
     	let img;
     	let img_src_value;
+    	let a_href_value;
+    	let a_download_value;
     	let t;
     	let mounted;
     	let dispose;
@@ -976,18 +979,22 @@ var app = (function () {
     		c: function create() {
     			article = element("article");
     			div = element("div");
+    			a = element("a");
     			img = element("img");
     			t = space();
     			if_block.c();
-    			if (img.src !== (img_src_value = /*src*/ ctx[0] || /*exampleSrc*/ ctx[1])) attr_dev(img, "src", img_src_value);
+    			if (img.src !== (img_src_value = /*src*/ ctx[0] || /*exampleSrc*/ ctx[2])) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "class", "svelte-wwc3d6");
-    			add_location(img, file, 31, 4, 498);
+    			add_location(img, file, 32, 80, 601);
+    			attr_dev(a, "href", a_href_value = /*downloadLink*/ ctx[1] || "#");
+    			attr_dev(a, "download", a_download_value = /*downloadLink*/ ctx[1] ? "tweet.jpg" : null);
+    			add_location(a, file, 32, 4, 525);
     			attr_dev(div, "id", "image-wrapper");
     			attr_dev(div, "class", "svelte-wwc3d6");
-    			add_location(div, file, 30, 2, 469);
+    			add_location(div, file, 31, 2, 496);
     			attr_dev(article, "id", "image");
     			attr_dev(article, "class", "svelte-wwc3d6");
-    			add_location(article, file, 29, 0, 446);
+    			add_location(article, file, 30, 0, 473);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -995,18 +1002,27 @@ var app = (function () {
     		m: function mount(target, anchor) {
     			insert_dev(target, article, anchor);
     			append_dev(article, div);
-    			append_dev(div, img);
+    			append_dev(div, a);
+    			append_dev(a, img);
     			append_dev(div, t);
     			if_block.m(div, null);
 
     			if (!mounted) {
-    				dispose = listen_dev(img, "click", /*click_handler*/ ctx[2], false, false, false);
+    				dispose = listen_dev(img, "click", /*click_handler*/ ctx[3], false, false, false);
     				mounted = true;
     			}
     		},
     		p: function update(ctx, [dirty]) {
-    			if (dirty & /*src*/ 1 && img.src !== (img_src_value = /*src*/ ctx[0] || /*exampleSrc*/ ctx[1])) {
+    			if (dirty & /*src*/ 1 && img.src !== (img_src_value = /*src*/ ctx[0] || /*exampleSrc*/ ctx[2])) {
     				attr_dev(img, "src", img_src_value);
+    			}
+
+    			if (dirty & /*downloadLink*/ 2 && a_href_value !== (a_href_value = /*downloadLink*/ ctx[1] || "#")) {
+    				attr_dev(a, "href", a_href_value);
+    			}
+
+    			if (dirty & /*downloadLink*/ 2 && a_download_value !== (a_download_value = /*downloadLink*/ ctx[1] ? "tweet.jpg" : null)) {
+    				attr_dev(a, "download", a_download_value);
     			}
 
     			if (current_block_type !== (current_block_type = select_block_type(ctx))) {
@@ -1042,8 +1058,9 @@ var app = (function () {
 
     function instance($$self, $$props, $$invalidate) {
     	let { src } = $$props;
+    	let { downloadLink } = $$props;
     	let exampleSrc = "/img?url=https://twitter.com/fermatslibrary/status/1273977843937169413";
-    	const writable_props = ["src"];
+    	const writable_props = ["src", "downloadLink"];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<ImageView> was created with unknown prop '${key}'`);
@@ -1058,26 +1075,28 @@ var app = (function () {
 
     	$$self.$set = $$props => {
     		if ("src" in $$props) $$invalidate(0, src = $$props.src);
+    		if ("downloadLink" in $$props) $$invalidate(1, downloadLink = $$props.downloadLink);
     	};
 
-    	$$self.$capture_state = () => ({ src, exampleSrc });
+    	$$self.$capture_state = () => ({ src, downloadLink, exampleSrc });
 
     	$$self.$inject_state = $$props => {
     		if ("src" in $$props) $$invalidate(0, src = $$props.src);
-    		if ("exampleSrc" in $$props) $$invalidate(1, exampleSrc = $$props.exampleSrc);
+    		if ("downloadLink" in $$props) $$invalidate(1, downloadLink = $$props.downloadLink);
+    		if ("exampleSrc" in $$props) $$invalidate(2, exampleSrc = $$props.exampleSrc);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [src, exampleSrc, click_handler];
+    	return [src, downloadLink, exampleSrc, click_handler];
     }
 
     class ImageView extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance, create_fragment, safe_not_equal, { src: 0 });
+    		init(this, options, instance, create_fragment, safe_not_equal, { src: 0, downloadLink: 1 });
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -1092,6 +1111,10 @@ var app = (function () {
     		if (/*src*/ ctx[0] === undefined && !("src" in props)) {
     			console.warn("<ImageView> was created without expected prop 'src'");
     		}
+
+    		if (/*downloadLink*/ ctx[1] === undefined && !("downloadLink" in props)) {
+    			console.warn("<ImageView> was created without expected prop 'downloadLink'");
+    		}
     	}
 
     	get src() {
@@ -1099,6 +1122,14 @@ var app = (function () {
     	}
 
     	set src(value) {
+    		throw new Error("<ImageView>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get downloadLink() {
+    		throw new Error("<ImageView>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set downloadLink(value) {
     		throw new Error("<ImageView>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
     }
@@ -1641,11 +1672,25 @@ var app = (function () {
     function create_fragment$5(ctx) {
     	let article;
     	let form;
-    	let input;
+    	let div0;
+    	let input0;
     	let t0;
     	let button;
     	let span;
     	let t2;
+    	let div1;
+    	let label0;
+    	let input1;
+    	let t3;
+    	let t4;
+    	let label1;
+    	let input2;
+    	let t5;
+    	let t6;
+    	let label2;
+    	let input3;
+    	let t7;
+    	let t8;
     	let footer;
     	let current;
     	let mounted;
@@ -1656,29 +1701,61 @@ var app = (function () {
     		c: function create() {
     			article = element("article");
     			form = element("form");
-    			input = element("input");
+    			div0 = element("div");
+    			input0 = element("input");
     			t0 = space();
     			button = element("button");
     			span = element("span");
     			span.textContent = "I";
     			t2 = space();
+    			div1 = element("div");
+    			label0 = element("label");
+    			input1 = element("input");
+    			t3 = text("\n        Dark");
+    			t4 = space();
+    			label1 = element("label");
+    			input2 = element("input");
+    			t5 = text("\n        liked");
+    			t6 = space();
+    			label2 = element("label");
+    			input3 = element("input");
+    			t7 = text("\n        remove Comments");
+    			t8 = space();
     			create_component(footer.$$.fragment);
-    			attr_dev(input, "type", "text");
-    			attr_dev(input, "placeholder", "Tweet link");
-    			attr_dev(input, "autocomplete", "url");
-    			input.autofocus = true;
-    			attr_dev(input, "class", "svelte-ln6e9e");
-    			add_location(input, file$5, 98, 4, 1962);
-    			attr_dev(span, "class", "icon svelte-ln6e9e");
-    			add_location(span, file$5, 100, 6, 2093);
+    			attr_dev(input0, "type", "text");
+    			attr_dev(input0, "placeholder", "Tweet link");
+    			attr_dev(input0, "autocomplete", "url");
+    			input0.autofocus = true;
+    			attr_dev(input0, "class", "svelte-1mou7qq");
+    			add_location(input0, file$5, 121, 6, 2385);
+    			attr_dev(span, "class", "icon svelte-1mou7qq");
+    			add_location(span, file$5, 128, 8, 2560);
     			attr_dev(button, "type", "submit");
-    			attr_dev(button, "class", "svelte-ln6e9e");
-    			add_location(button, file$5, 99, 4, 2064);
-    			attr_dev(form, "class", "svelte-ln6e9e");
-    			add_location(form, file$5, 97, 2, 1913);
+    			attr_dev(button, "class", "svelte-1mou7qq");
+    			add_location(button, file$5, 127, 6, 2529);
+    			attr_dev(div0, "id", "url");
+    			attr_dev(div0, "class", "svelte-1mou7qq");
+    			add_location(div0, file$5, 120, 4, 2364);
+    			attr_dev(input1, "type", "checkbox");
+    			add_location(input1, file$5, 133, 8, 2686);
+    			attr_dev(label0, "title", "enable dark theme");
+    			add_location(label0, file$5, 132, 6, 2644);
+    			attr_dev(input2, "type", "checkbox");
+    			add_location(input2, file$5, 137, 8, 2807);
+    			attr_dev(label1, "title", "make tweet liked");
+    			add_location(label1, file$5, 136, 6, 2766);
+    			attr_dev(input3, "type", "checkbox");
+    			add_location(input3, file$5, 141, 8, 2930);
+    			attr_dev(label2, "title", "make tweet liked");
+    			add_location(label2, file$5, 140, 6, 2889);
+    			attr_dev(div1, "id", "options");
+    			attr_dev(div1, "class", "svelte-1mou7qq");
+    			add_location(div1, file$5, 131, 4, 2619);
+    			attr_dev(form, "class", "svelte-1mou7qq");
+    			add_location(form, file$5, 119, 2, 2315);
     			attr_dev(article, "id", "query");
-    			attr_dev(article, "class", "svelte-ln6e9e");
-    			add_location(article, file$5, 96, 0, 1890);
+    			attr_dev(article, "class", "svelte-1mou7qq");
+    			add_location(article, file$5, 118, 0, 2292);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -1686,28 +1763,60 @@ var app = (function () {
     		m: function mount(target, anchor) {
     			insert_dev(target, article, anchor);
     			append_dev(article, form);
-    			append_dev(form, input);
-    			set_input_value(input, /*tweetUrl*/ ctx[0]);
-    			append_dev(form, t0);
-    			append_dev(form, button);
+    			append_dev(form, div0);
+    			append_dev(div0, input0);
+    			set_input_value(input0, /*tweetUrl*/ ctx[0]);
+    			append_dev(div0, t0);
+    			append_dev(div0, button);
     			append_dev(button, span);
-    			append_dev(article, t2);
+    			append_dev(form, t2);
+    			append_dev(form, div1);
+    			append_dev(div1, label0);
+    			append_dev(label0, input1);
+    			input1.checked = /*dark*/ ctx[1];
+    			append_dev(label0, t3);
+    			append_dev(div1, t4);
+    			append_dev(div1, label1);
+    			append_dev(label1, input2);
+    			input2.checked = /*liked*/ ctx[2];
+    			append_dev(label1, t5);
+    			append_dev(div1, t6);
+    			append_dev(div1, label2);
+    			append_dev(label2, input3);
+    			input3.checked = /*removeComments*/ ctx[3];
+    			append_dev(label2, t7);
+    			append_dev(article, t8);
     			mount_component(footer, article, null);
     			current = true;
-    			input.focus();
+    			input0.focus();
 
     			if (!mounted) {
     				dispose = [
-    					listen_dev(input, "input", /*input_input_handler*/ ctx[2]),
-    					listen_dev(form, "submit", prevent_default(/*emitSubmit*/ ctx[1]), false, true, false)
+    					listen_dev(input0, "input", /*input0_input_handler*/ ctx[5]),
+    					listen_dev(input1, "change", /*input1_change_handler*/ ctx[6]),
+    					listen_dev(input2, "change", /*input2_change_handler*/ ctx[7]),
+    					listen_dev(input3, "change", /*input3_change_handler*/ ctx[8]),
+    					listen_dev(form, "submit", prevent_default(/*emitSubmit*/ ctx[4]), false, true, false)
     				];
 
     				mounted = true;
     			}
     		},
     		p: function update(ctx, [dirty]) {
-    			if (dirty & /*tweetUrl*/ 1 && input.value !== /*tweetUrl*/ ctx[0]) {
-    				set_input_value(input, /*tweetUrl*/ ctx[0]);
+    			if (dirty & /*tweetUrl*/ 1 && input0.value !== /*tweetUrl*/ ctx[0]) {
+    				set_input_value(input0, /*tweetUrl*/ ctx[0]);
+    			}
+
+    			if (dirty & /*dark*/ 2) {
+    				input1.checked = /*dark*/ ctx[1];
+    			}
+
+    			if (dirty & /*liked*/ 4) {
+    				input2.checked = /*liked*/ ctx[2];
+    			}
+
+    			if (dirty & /*removeComments*/ 8) {
+    				input3.checked = /*removeComments*/ ctx[3];
     			}
     		},
     		i: function intro(local) {
@@ -1741,9 +1850,12 @@ var app = (function () {
     function instance$5($$self, $$props, $$invalidate) {
     	const dispatch = createEventDispatcher();
     	let tweetUrl = "";
+    	let dark = false;
+    	let liked = false;
+    	let removeComments = false;
 
     	function emitSubmit() {
-    		dispatch("formsubmit", { tweetUrl });
+    		dispatch("formsubmit", { tweetUrl, dark, liked, removeComments });
     	}
 
     	const writable_props = [];
@@ -1755,9 +1867,24 @@ var app = (function () {
     	let { $$slots = {}, $$scope } = $$props;
     	validate_slots("Form", $$slots, []);
 
-    	function input_input_handler() {
+    	function input0_input_handler() {
     		tweetUrl = this.value;
     		$$invalidate(0, tweetUrl);
+    	}
+
+    	function input1_change_handler() {
+    		dark = this.checked;
+    		$$invalidate(1, dark);
+    	}
+
+    	function input2_change_handler() {
+    		liked = this.checked;
+    		$$invalidate(2, liked);
+    	}
+
+    	function input3_change_handler() {
+    		removeComments = this.checked;
+    		$$invalidate(3, removeComments);
     	}
 
     	$$self.$capture_state = () => ({
@@ -1765,18 +1892,34 @@ var app = (function () {
     		Footer,
     		dispatch,
     		tweetUrl,
+    		dark,
+    		liked,
+    		removeComments,
     		emitSubmit
     	});
 
     	$$self.$inject_state = $$props => {
     		if ("tweetUrl" in $$props) $$invalidate(0, tweetUrl = $$props.tweetUrl);
+    		if ("dark" in $$props) $$invalidate(1, dark = $$props.dark);
+    		if ("liked" in $$props) $$invalidate(2, liked = $$props.liked);
+    		if ("removeComments" in $$props) $$invalidate(3, removeComments = $$props.removeComments);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [tweetUrl, emitSubmit, input_input_handler];
+    	return [
+    		tweetUrl,
+    		dark,
+    		liked,
+    		removeComments,
+    		emitSubmit,
+    		input0_input_handler,
+    		input1_change_handler,
+    		input2_change_handler,
+    		input3_change_handler
+    	];
     }
 
     class Form extends SvelteComponentDev {
@@ -1805,14 +1948,17 @@ var app = (function () {
     	let imageview;
     	let current;
     	form = new Form({ $$inline: true });
-    	form.$on("formsubmit", /*handleSubmit*/ ctx[1]);
+    	form.$on("formsubmit", /*handleSubmit*/ ctx[2]);
 
     	imageview = new ImageView({
-    			props: { src: /*imgSrc*/ ctx[0] },
+    			props: {
+    				src: /*imgSrc*/ ctx[0],
+    				downloadLink: /*downloadLink*/ ctx[1]
+    			},
     			$$inline: true
     		});
 
-    	imageview.$on("click", /*downloadImage*/ ctx[2]);
+    	imageview.$on("click", /*downloadImage*/ ctx[3]);
 
     	const block = {
     		c: function create() {
@@ -1821,7 +1967,7 @@ var app = (function () {
     			t = space();
     			create_component(imageview.$$.fragment);
     			attr_dev(main, "class", "svelte-1r82w8z");
-    			add_location(main, file$6, 57, 0, 1235);
+    			add_location(main, file$6, 62, 0, 1479);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -1836,6 +1982,7 @@ var app = (function () {
     		p: function update(ctx, [dirty]) {
     			const imageview_changes = {};
     			if (dirty & /*imgSrc*/ 1) imageview_changes.src = /*imgSrc*/ ctx[0];
+    			if (dirty & /*downloadLink*/ 2) imageview_changes.downloadLink = /*downloadLink*/ ctx[1];
     			imageview.$set(imageview_changes);
     		},
     		i: function intro(local) {
@@ -1869,30 +2016,30 @@ var app = (function () {
 
     function instance$6($$self, $$props, $$invalidate) {
     	let imgSrc = "";
+    	let downloadLink = "";
 
     	async function handleSubmit(e) {
-    		const tweetUrl = e.detail.tweetUrl;
+    		const { tweetUrl, liked, dark, removeComments } = e.detail;
+    		console.log({ tweetUrl, liked, dark, removeComments });
     		if (!tweetUrl.length) return;
     		nprogress.start();
+    		let url = `/img?url=${tweetUrl}${dark ? "&theme=dark" : ""}${liked ? "&liked=true" : ""}${removeComments ? "&removeComments=true" : ""}`;
 
-    		fetch(`/img?url=${tweetUrl}`).then(response => response.blob()).then(blob => {
-    			var reader = new FileReader();
+    		fetch(url).then(response => response.blob()).then(blob => {
+    			$$invalidate(0, imgSrc = URL.createObjectURL(blob));
+    			nprogress.done();
+    			$$invalidate(1, downloadLink = imgSrc);
+    		}); // var reader = new FileReader();
+    		// reader.addEventListener("loadend", () => {
+    		//   let contents = reader.result;
+    		//   imgSrc = contents;
+    	} //   nprogress.done();
+    	// });
 
-    			reader.addEventListener("loadend", () => {
-    				let contents = reader.result;
-    				$$invalidate(0, imgSrc = contents);
-    				nprogress.done();
-    			});
-
-    			reader.readAsDataURL(blob);
-    		});
-    	}
-
+    	// reader.readAsDataURL(blob);
     	function downloadImage() {
     		if (!imgSrc.length) return;
-    		var url = imgSrc.replace(/^data:image\/[^;]+/, "data:application/octet-stream");
-    		console.log(url);
-    		window.open(url);
+    		URL.revokeObjectURL(imgSrc);
     	}
 
     	const writable_props = [];
@@ -1909,19 +2056,21 @@ var app = (function () {
     		ImageView,
     		Form,
     		imgSrc,
+    		downloadLink,
     		handleSubmit,
     		downloadImage
     	});
 
     	$$self.$inject_state = $$props => {
     		if ("imgSrc" in $$props) $$invalidate(0, imgSrc = $$props.imgSrc);
+    		if ("downloadLink" in $$props) $$invalidate(1, downloadLink = $$props.downloadLink);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [imgSrc, handleSubmit, downloadImage];
+    	return [imgSrc, downloadLink, handleSubmit, downloadImage];
     }
 
     class App extends SvelteComponentDev {

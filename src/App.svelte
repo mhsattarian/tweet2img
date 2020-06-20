@@ -6,34 +6,39 @@
   import Form from "./components/form.svelte";
 
   let imgSrc = "";
+  let downloadLink = "";
 
   async function handleSubmit(e) {
-    const tweetUrl = e.detail.tweetUrl;
+    const {tweetUrl, liked, dark, removeComments} = e.detail;
+
+    console.log({tweetUrl, liked, dark, removeComments});
+
     if (!tweetUrl.length) return;
 
     nprogress.start();
-    fetch(`/img?url=${tweetUrl}`)
+    let url = `/img?url=${tweetUrl}${dark ? '&theme=dark' : ''}${liked ? '&liked=true' : ''}${removeComments ? '&removeComments=true' : ''}`;
+    fetch(url)
       .then(response => response.blob())
       .then(blob => {
-        var reader = new FileReader();
-        reader.addEventListener("loadend", () => {
-          let contents = reader.result;
-          imgSrc = contents;
-          nprogress.done();
-        });
-        reader.readAsDataURL(blob);
+        
+        imgSrc = URL.createObjectURL(blob);
+        nprogress.done();
+
+        downloadLink = imgSrc;
+
+        // var reader = new FileReader();
+        // reader.addEventListener("loadend", () => {
+        //   let contents = reader.result;
+        //   imgSrc = contents;
+        //   nprogress.done();
+        // });
+        // reader.readAsDataURL(blob);
       });
   }
 
   function downloadImage() {
     if (!imgSrc.length) return;
-    
-    var url = imgSrc.replace(
-      /^data:image\/[^;]+/,
-      "data:application/octet-stream"
-    );
-    console.log(url);
-    window.open(url);
+    URL.revokeObjectURL(imgSrc);
   }
 </script>
 
@@ -57,5 +62,5 @@
 
 <main>
   <Form on:formsubmit={handleSubmit} />
-  <ImageView src={imgSrc} on:click={downloadImage} />
+  <ImageView src={imgSrc} downloadLink={downloadLink} on:click={downloadImage} />
 </main>

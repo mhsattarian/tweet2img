@@ -26,7 +26,7 @@ async function getOptions(isDev) {
   return options;
 }
 
-async function getScreenshot(html, isDev, theme) {
+async function getScreenshot(html, isDev, theme, liked, removeComments) {
   const options = await getOptions(isDev);
   console.log("📸");
   const browser = await puppeteer.launch(options);
@@ -39,7 +39,7 @@ async function getScreenshot(html, isDev, theme) {
   });
 
   // calculate the content bbox
-  const rect = await page.evaluate((selector) => {
+  const rect = await page.evaluate((selector, liked, removeComments) => {
     const element = document.querySelector(selector);
     try {
       element.shadowRoot.querySelector(".SandboxRoot").style.fontFamily =
@@ -47,9 +47,22 @@ async function getScreenshot(html, isDev, theme) {
     } catch (err) {
       console.log(err);
     }
+
+    if (liked){
+      const heartEl = element.shadowRoot.querySelector("a[title='Like'] div div");
+      heartEl.style.webkitMaskImage = window.getComputedStyle(heartEl).backgroundImage;
+      heartEl.style.webkitMaskSize = '18px';
+      heartEl.style.backgroundColor = 'red';
+      heartEl.style.backgroundBlendMode = 'lighten';
+    }
+
+    if (removeComments){
+      element.shadowRoot.querySelector(".CallToAction").remove();
+    }
+
     const { x, y, width, height } = element.getBoundingClientRect();
     return { left: x, top: y, width, height, id: element.id };
-  }, ".twitter-tweet");
+  }, ".twitter-tweet", liked, removeComments);
 
   await page.evaluate((theme) => {
     document.body.style.background = theme === "light" ? "white" : "black";
@@ -77,6 +90,10 @@ async function getScreenshot(html, isDev, theme) {
 exports.handler = async (event, context, callback) => {
   const url = event.queryStringParameters.url;
   const theme = event.queryStringParameters.theme || "light";
+  const liked = event.queryStringParameters.liked === 'true' ? true : false;
+  const removeComments = event.queryStringParameters.removeComments === 'true' ? true : false;
+
+  console.log(liked, removeComments)
 
   const r = await fetch(
     `https://publish.twitter.com/oembed?url=${url}&hide_thread=true&theme=${theme}`
@@ -89,7 +106,7 @@ exports.handler = async (event, context, callback) => {
       r.html;
     html.replace("https://platform.twitter.com", "");
 
-    const photoBuffer = await getScreenshot(html, isDev, theme);
+    const photoBuffer = await getScreenshot(html, isDev, theme, liked, removeComments);
     return {
       statusCode: 200,
       body: photoBuffer.toString("base64"),

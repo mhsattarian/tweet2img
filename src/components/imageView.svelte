@@ -1,5 +1,6 @@
 <script>
   export let src;
+  export let downloadLink;
   let exampleSrc = '/img?url=https://twitter.com/fermatslibrary/status/1273977843937169413';
 </script>
 
@@ -29,7 +30,7 @@
 
 <article id="image">
   <div id="image-wrapper">
-    <img src={src || exampleSrc} on:click />
+    <a href={downloadLink || '#'} download={downloadLink ? 'tweet.jpg' : null} ><img src={src || exampleSrc} on:click /></a>
     {#if src.length}
       <p>click image to download</p>
     {:else}
