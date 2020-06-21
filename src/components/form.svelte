@@ -125,7 +125,7 @@
       <input
         bind:value={tweetUrl}
         type="text"
-        placeholder="Tweet link"
+        placeholder="Tweet link e.g., https://twitter.com/fermatslibrary/status/1273977843937169413"
         autocomplete="url"
         autofocus />
       <button type="submit">
@@ -133,15 +133,15 @@
       </button>
     </div>
     <div id="options">
-      <label title="enable dark theme">
+      <label title="enables dark theme">
         <input bind:checked={dark} type="checkbox" />
         Dark
       </label>
-      <label title="make tweet liked">
+      <label title="makes tweet liked">
         <input bind:checked={liked} type="checkbox" />
         liked
       </label>
-      <label title="make tweet liked">
+      <label title="removes comments section">
         <input bind:checked={removeComments} type="checkbox" />
         remove Comments
       </label>
