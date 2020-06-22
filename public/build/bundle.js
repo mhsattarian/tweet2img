@@ -3733,7 +3733,7 @@ var app = (function () {
     			t = space();
     			create_component(imageview.$$.fragment);
     			attr_dev(main, "class", "svelte-1r82w8z");
-    			add_location(main, file$a, 73, 0, 1723);
+    			add_location(main, file$a, 73, 0, 1731);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -3790,7 +3790,7 @@ var app = (function () {
     	async function handleSubmit(e) {
     		const { tweetUrl, liked, dark, removeComments } = e.detail;
 
-    		if (!tweetUrl.length) return; else if (!tweetUrl.startsWith("https://twitter.com")) {
+    		if (!tweetUrl.length) return; else if (!new URL(tweetUrl).hostname.endsWith("twitter.com")) {
     			addNotification({
     				text: "Invalid URL",
     				type: "danger",

@@ -16,7 +16,7 @@
     const { tweetUrl, liked, dark, removeComments } = e.detail;
 
     if (!tweetUrl.length) return;
-    else if (!tweetUrl.startsWith("https://twitter.com")) {
+    else if (!new URL(tweetUrl).hostname.endsWith('twitter.com')) {
       addNotification({
         text: "Invalid URL",
         type: "danger",
