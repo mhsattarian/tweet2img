@@ -10,15 +10,17 @@ const exePath = "/usr/bin/google-chrome";
 
 async function getOptions(isDev) {
   let options;
+  const awsOptions = chrome.args.push("--disable-web-security");
   if (isDev) {
+    console.log("on dev");
     options = {
-      args: ["--incognito"],
+      args: ["--incognito", "--disable-web-security"],
       executablePath: exePath,
       headless: true,
     };
   } else {
     options = {
-      args: chrome.args,
+      args: awsOptions,
       executablePath: await chrome.executablePath,
       headless: chrome.headless,
     };
@@ -35,7 +37,7 @@ async function getScreenshot(html, isDev, theme, liked, removeComments) {
 
   await page.setViewport({ width: 720, height: 1920, deviceScaleFactor: 1.5 });
   await page.setContent(html, {
-    waitUntil: ["networkidle0", "domcontentloaded"],
+    // waitUntil: ["networkidle0", "domcontentloaded"],
   });
 
   // calculate the content bbox
@@ -43,8 +45,34 @@ async function getScreenshot(html, isDev, theme, liked, removeComments) {
     (selector, liked, removeComments) => {
       const element = document.querySelector(selector);
       try {
-        element.shadowRoot.querySelector(".SandboxRoot").style.fontFamily =
-          "Vazir";
+        // element.shadowRoot.querySelector(".SandboxRoot").style.fontFamily =
+        //   "Vazir";
+        const _d = element.childNodes[0].contentDocument;
+        // _d.head.innerHTML +=
+        //   '<link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v26.0.2/dist/font-face.css">';
+        var link = _d.createElement("link");
+        link.id = "id2";
+        link.rel = "stylesheet";
+        link.href =
+          "https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v26.0.2/dist/font-face.css";
+        _d.head.appendChild(link);
+        // _d.body.style.fontFamily = "Vazir !important";
+
+        var css = `div[lang="fa"] {
+        font-family: Vazir !important;
+        color: red;
+        }`;
+        style = document.createElement("style");
+
+        _d.head.appendChild(style);
+
+        style.type = "text/css";
+        if (style.styleSheet) {
+          // This is required for IE8 and below.
+          style.styleSheet.cssText = css;
+        } else {
+          style.appendChild(document.createTextNode(css));
+        }
       } catch (err) {
         console.log(err);
       }
@@ -81,7 +109,10 @@ async function getScreenshot(html, isDev, theme, liked, removeComments) {
   // // local is slower to render font
   // else await wait(100);
 
-  await wait(700);
+  // await wait(700);
+  await page.waitForNavigation({
+    waitUntil: "networkidle0",
+  });
 
   // screen shot only the rect
   let padding = 0;
