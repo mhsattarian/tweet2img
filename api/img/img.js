@@ -39,38 +39,49 @@ async function getScreenshot(html, isDev, theme, liked, removeComments) {
   });
 
   // calculate the content bbox
-  const rect = await page.evaluate((selector, liked, removeComments) => {
-    const element = document.querySelector(selector);
-    try {
-      element.shadowRoot.querySelector(".SandboxRoot").style.fontFamily =
-        "Vazir";
-    } catch (err) {
-      console.log(err);
-    }
+  const rect = await page.evaluate(
+    (selector, liked, removeComments) => {
+      const element = document.querySelector(selector);
+      try {
+        element.shadowRoot.querySelector(".SandboxRoot").style.fontFamily =
+          "Vazir";
+      } catch (err) {
+        console.log(err);
+      }
 
-    if (liked){
-      const heartEl = element.shadowRoot.querySelector("a[title='Like'] div div");
-      heartEl.style.webkitMaskImage = window.getComputedStyle(heartEl).backgroundImage;
-      heartEl.style.webkitMaskSize = '18px';
-      heartEl.style.backgroundColor = 'red';
-      heartEl.style.backgroundBlendMode = 'lighten';
-    }
+      if (liked) {
+        const heartEl = element.shadowRoot.querySelector(
+          "a[title='Like'] div div"
+        );
+        heartEl.style.webkitMaskImage = window.getComputedStyle(
+          heartEl
+        ).backgroundImage;
+        heartEl.style.webkitMaskSize = "18px";
+        heartEl.style.backgroundColor = "red";
+        heartEl.style.backgroundBlendMode = "lighten";
+      }
 
-    if (removeComments){
-      element.shadowRoot.querySelector(".CallToAction").remove();
-    }
+      if (removeComments) {
+        element.shadowRoot.querySelector(".CallToAction").remove();
+      }
 
-    const { x, y, width, height } = element.getBoundingClientRect();
-    return { left: x, top: y, width, height, id: element.id };
-  }, ".twitter-tweet", liked, removeComments);
+      const { x, y, width, height } = element.getBoundingClientRect();
+      return { left: x, top: y, width, height, id: element.id };
+    },
+    ".twitter-tweet",
+    liked,
+    removeComments
+  );
 
   await page.evaluate((theme) => {
     document.body.style.background = theme === "light" ? "white" : "black";
   }, theme);
 
-  if (isDev) await wait(700);
-  // local is slower to render font
-  else await wait(100);
+  // if (isDev) await wait(700);
+  // // local is slower to render font
+  // else await wait(100);
+
+  await wait(700);
 
   // screen shot only the rect
   let padding = 0;
@@ -90,10 +101,11 @@ async function getScreenshot(html, isDev, theme, liked, removeComments) {
 exports.handler = async (event, context, callback) => {
   const url = event.queryStringParameters.url;
   const theme = event.queryStringParameters.theme || "light";
-  const liked = event.queryStringParameters.liked === 'true' ? true : false;
-  const removeComments = event.queryStringParameters.removeComments === 'true' ? true : false;
+  const liked = event.queryStringParameters.liked === "true" ? true : false;
+  const removeComments =
+    event.queryStringParameters.removeComments === "true" ? true : false;
 
-  console.log(liked, removeComments)
+  console.log(liked, removeComments);
 
   const r = await fetch(
     `https://publish.twitter.com/oembed?url=${url}&hide_thread=true&theme=${theme}`
@@ -104,9 +116,16 @@ exports.handler = async (event, context, callback) => {
     let html =
       '<link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v26.0.2/dist/font-face.css">' +
       r.html;
-    html.replace("https://platform.twitter.com", "");
 
-    const photoBuffer = await getScreenshot(html, isDev, theme, liked, removeComments);
+    // html.replace("https://platform.twitter.com", "");
+
+    const photoBuffer = await getScreenshot(
+      html,
+      isDev,
+      theme,
+      liked,
+      removeComments
+    );
     return {
       statusCode: 200,
       body: photoBuffer.toString("base64"),
